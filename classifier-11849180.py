@@ -1,6 +1,8 @@
+import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.neighbors import KNeighborsClassifier
 
 
 
@@ -23,22 +25,31 @@ def evaluate_accuracy(model, X, y, testX, testy):
     predy = model.predict(testX)
     return predy, accuracy_score(testy, predy)
 
+# def fetch_full_data(filename='falldetection.csv'):
+#     data = pd.read_csv(filename)
+#     X = data.iloc[:,[1,2,3,4,5,6]].astype(np.int64)
+#     y = data.iloc[:,0]
+#     X = X[['SL', 'TIME', 'BP', 'CIRCLUATION', 'HR', 'EEG']]
+#     return X.values, y.values
+#
+# X_train, y_train = fetch_full_data()
+# X_test = fetch_data('test.csv', False)
+# knn = KNeighborsClassifier(n_neighbors=1, leaf_size=1, metric='manhattan', n_jobs=-1)
+# pred_y = knn.fit(X_train, y_train).predict(X_test)
+# pd.Series(pred_y, name='Category').to_csv('true_label.csv', index=False, header=True)
 
 
 X_train, y_train = fetch_data('./train.csv')
 X_test = fetch_data('./test.csv', False)
-y_real = pd.read_csv('true_label.csv').iloc[:,0]
+y_real = pd.read_csv('./true_label.csv').iloc[:,0]
 
 
-while True:
-    rf = RandomForestClassifier(n_estimators=100)
+rf = RandomForestClassifier(n_estimators=100)
 
-    y_pred, acc = evaluate_accuracy(rf, X_train, y_train, X_test, y_real)
-    print 'accuracy', acc
+y_pred, acc = evaluate_accuracy(rf, X_train, y_train, X_test, y_real)
+print 'accuracy', acc
 
-    label = 'rforest' + str(int(acc*1000))
+label = 'rforest' + str(int(acc*1000))
 
-    if acc > 0.76:
-        write_data(y_pred, label)
-        print 'write predicted file'
-        break
+# write_data(y_pred, label)
+# print 'write predicted file'
