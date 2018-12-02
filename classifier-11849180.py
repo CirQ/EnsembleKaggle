@@ -44,12 +44,16 @@ X_test = fetch_data('./test.csv', False)
 y_real = pd.read_csv('./true_label.csv').iloc[:,0]
 
 
-rf = RandomForestClassifier(n_estimators=100)
+rf = RandomForestClassifier(
+    n_estimators=100,
+    bootstrap=False,
+    n_jobs=-1,
+)
 
 y_pred, acc = evaluate_accuracy(rf, X_train, y_train, X_test, y_real)
 print 'accuracy', acc
 
-label = 'rforest' + str(int(acc*1000))
+label = 'rforest' + str(int(acc*2000))
 
-# write_data(y_pred, label)
-# print 'write predicted file'
+write_data(y_pred, label)
+print 'write predicted file'
