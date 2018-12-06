@@ -107,4 +107,6 @@ venv.bak/
 
 .idea
 result
+report
 falldetection.csv
+*.png
