@@ -31,7 +31,7 @@ def plot_feature(features, filename):
         axes[x, y].set_title('#' + names[i])
     fig.tight_layout()
     fig.subplots_adjust(hspace=0.3, wspace=0.2)
-    plt.savefig(filename+'.png')
+    plt.savefig(filename+'.eps', dpi=1000)
 
 def plot_pairwise_matrix(X, filename):
     sns.pairplot(X, height=2.4)
@@ -47,7 +47,7 @@ def plot_correlation_heatmap(X, filename):
         for j in range(len(corr)):
             ax.text(j, i, '', ha='center', va='center', color='w')
     fig.tight_layout()
-    plt.savefig(filename+'.png')
+    plt.savefig(filename+'.eps', dpi=1000)
 
 def plot_feature_labeling(X, y, filename):
     fig, axes = plt.subplots(nrows=6, ncols=6, figsize=(20, 15))
@@ -67,29 +67,21 @@ def plot_feature_labeling(X, y, filename):
     plt.savefig(filename+'.png')
 
 
-# plot_feature(X_train, 'trainset_plot')
-# plot_feature(X_test, 'testset_plot')
-# plot_pairwise_matrix(X_train, 'pairwise_plot')
-# plot_correlation_heatmap(X_train, 'correlation_plot')
-# plot_feature_labeling(X_train, y_train, 'label_wise_plot')
-
-
 def outlier_detection(data):
     q1 = data['SL'].quantile(0.995)
     q6 = data['EEG'].quantile(0.005)
     return (data['SL'] > q1) | (data['EEG'] < q6)
 
 def drop_coulmn(data):
-    # recorded after 100 runs
-    # return data # 0.89879
-    # return data.drop(['SL'], axis=1)    # 0.873155
-    # return data.drop(['Circulation'], axis=1)   # 0.895555
-    # return data.drop(['Time'], axis=1)  # 0.88029
-    # return data.drop(['HR'], axis=1)    # 0.895265
-    # return data.drop(['SL', 'Time'], axis=1)    # 0.815865
-    # return data.drop(['SL', 'HR'], axis=1)  # 0.87282
-    # return data.drop(['Circulation', 'Time'], axis=1) # 0.875345
-    return data.drop(['Circulation', 'HR'], axis=1) # 0.883365
+    # return data                                 # 0.9005 0.903
+    # return data.drop(['SL'], axis=1)            # 0.8835 0.884
+    # return data.drop(['Circulation'], axis=1)   # 0.9025 0.901
+    # return data.drop(['Time'], axis=1)          # 0.8795 0.8835
+    return data.drop(['HR'], axis=1)            # 0.906 0.9095
+    # return data.drop(['SL', 'Time'], axis=1)    # 0.8225 0.8215
+    # return data.drop(['SL', 'HR'], axis=1)      # 0.8825 0.8835
+    # return data.drop(['Circulation', 'Time'], axis=1)   # 0.8815 0.8805
+    # return data.drop(['Circulation', 'HR'], axis=1)     # 0.8895 0.889
 
 
 def fetch_all_data():
@@ -103,6 +95,30 @@ def fetch_all_data():
     y_real = pd.read_csv('true_label.csv')
     # outlier_test = outlier_detection(X_test)
 
-    # X_train = drop_coulmn(X_train)
-    # X_test = drop_coulmn(X_test)
+    X_train = drop_coulmn(X_train)
+    X_test = drop_coulmn(X_test)
     return X_train, y_train, X_test, y_real
+
+
+def data_statistics():
+    traindata = pd.read_csv('falldetection.csv')
+    count = dict(pd.value_counts(traindata['ACTIVITY']))
+    total = len(traindata)
+    for i in range(6):
+        print i, count[i], count[i]/float(total)
+    print ''
+    for col in traindata:
+        print 'name', col
+        print 'mean', traindata[col].mean()
+        print 'min', traindata[col].min()
+        print 'max', traindata[col].max()
+        print ''
+
+# data_statistics()
+
+# X_train, y_train, X_test, y_real = fetch_all_data()
+# plot_feature(X_train, 'trainset_plot')
+# plot_feature(X_test, 'testset_plot')
+# plot_pairwise_matrix(X_train, 'pairwise_plot')
+# plot_correlation_heatmap(X_train, 'correlation_plot')
+# plot_feature_labeling(X_train, y_train, 'label_wise_plot')

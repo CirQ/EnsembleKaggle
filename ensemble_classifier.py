@@ -36,10 +36,5 @@ def AdaDTEnsembler(X_train, y_train, X_test, y_real):
 
 if __name__ == '__main__':
     X_train, y_train, X_test, y_real = fetch_all_data()
-    while True:
-        y_pred, acc = AdaDTEnsembler(X_train, y_train, X_test, y_real)
-        print 'accuracy:', acc
-        if acc > 0.908:
-            label = 'adadt' + str(int(acc*2000))
-            write_data(y_pred, label)
-            break
+    y_pred, acc = AdaDTEnsembler(X_train, y_train, X_test, y_real)
+    print 'accuracy:', acc
