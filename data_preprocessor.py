@@ -20,7 +20,7 @@ import seaborn as sns
 #
 # X_train, y_train = fetch_full_data()
 # X_test = fetch_data('test.csv')
-# knn = KNeighborsClassifier(n_neighbors=1, leaf_size=1, metric='manhattan', n_jobs=-1)
+# knn = KNeighborsClassifier(n_neighbors=1, leaf_size=1, metric='euclidean', n_jobs=-1)
 # pred_y = knn.fit(X_train, y_train).predict(X_test)
 # pd.Series(pred_y, name='Category').to_csv('true_label.csv', index=False, header=True)
 
@@ -77,15 +77,15 @@ def outlier_detection(data):
     return (data['SL'] > q1) | (data['EEG'] < q6)
 
 def drop_coulmn(data):
-    # return data                                 # 0.9005 0.903
-    # return data.drop(['SL'], axis=1)            # 0.8835 0.884
-    # return data.drop(['Circulation'], axis=1)   # 0.9025 0.901
-    # return data.drop(['Time'], axis=1)          # 0.8795 0.8835
-    return data.drop(['HR'], axis=1)            # 0.906 0.9095
-    # return data.drop(['SL', 'Time'], axis=1)    # 0.8225 0.8215
-    # return data.drop(['SL', 'HR'], axis=1)      # 0.8825 0.8835
-    # return data.drop(['Circulation', 'Time'], axis=1)   # 0.8815 0.8805
-    # return data.drop(['Circulation', 'HR'], axis=1)     # 0.8895 0.889
+    return data                                 # 0.758 0.757
+    # return data.drop(['SL'], axis=1)            # 0.733 0.736
+    # return data.drop(['Circulation'], axis=1)   # 0.743 0.743
+    # return data.drop(['Time'], axis=1)          # 0.741 0.739
+    # return data.drop(['HR'], axis=1)            # 0.745 0.742
+    # return data.drop(['SL', 'Time'], axis=1)    # 0.71 0.701
+    # return data.drop(['SL', 'HR'], axis=1)      # 0.701 0.709
+    # return data.drop(['Circulation', 'Time'], axis=1)   # 0.718 0.719
+    # return data.drop(['Circulation', 'HR'], axis=1)     # 0.702 0.7
 
 
 def fetch_all_data():

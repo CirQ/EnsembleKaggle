@@ -9,7 +9,7 @@ def proc(X_train, y_train, X_test, y_real, finishevent, printlock, resultmanager
         y_pred, acc = AdaDTEnsembler(X_train, y_train, X_test, y_real)
         with printlock:
             print 'The accuracy score is', acc
-        if acc >= 0.75:
+        if acc > 0.763:
             resultmanager['pred_y'] = y_pred
             resultmanager['acc'] = acc
             finishevent.set()

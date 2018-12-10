@@ -23,7 +23,8 @@ def write_data(yhat, filename):
 
 def AdaDTEnsembler(X_train, y_train, X_test, y_real):
     dt = DecisionTreeClassifier(
-        max_depth=20,
+        criterion='entropy',
+        max_depth=16,
         max_features='log2',
     )
     abc = AdaBoostClassifier(
