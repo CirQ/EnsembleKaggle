@@ -9,7 +9,7 @@ def proc(X_train, y_train, X_test, y_real, finishevent, printlock, resultmanager
         y_pred, acc = AdaDTEnsembler(X_train, y_train, X_test, y_real)
         with printlock:
             print 'The accuracy score is', acc
-        if acc > 0.91:
+        if acc >= 0.75:
             resultmanager['pred_y'] = y_pred
             resultmanager['acc'] = acc
             finishevent.set()
@@ -22,14 +22,14 @@ def main():
     print_lock = Lock()
     result_manager = Manager().dict({'pred_y':None, 'acc':None})
     procs = []
-    for _ in range(cpu_count()-1):
+    for _ in range(cpu_count()-2):
         args = [X_train, y_train, X_test, y_real, finish_event, print_lock, result_manager]
         p = Process(target=proc, args=args)
         procs.append(p)
         p.start()
     for p in procs:
         p.join()
-    label = 'adadt' + str(int(result_manager['acc']*2000))
+    label = 'adadt' + str(int(result_manager['acc']*1000))
     write_data(result_manager['pred_y'], label)
 
 

@@ -14,8 +14,12 @@ import seaborn as sns
 #     X = X[['SL', 'TIME', 'BP', 'CIRCLUATION', 'HR', 'EEG']]
 #     return X.values, y.values
 #
+# def fetch_data(filename):
+#     data = pd.read_csv(filename)
+#     return data.values
+#
 # X_train, y_train = fetch_full_data()
-# X_test = fetch_data('test.csv', False)
+# X_test = fetch_data('test.csv')
 # knn = KNeighborsClassifier(n_neighbors=1, leaf_size=1, metric='manhattan', n_jobs=-1)
 # pred_y = knn.fit(X_train, y_train).predict(X_test)
 # pd.Series(pred_y, name='Category').to_csv('true_label.csv', index=False, header=True)
