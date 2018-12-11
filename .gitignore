@@ -110,3 +110,4 @@ result
 report
 falldetection.csv
 *.png
+*.pickle
