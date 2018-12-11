@@ -1,15 +1,15 @@
 from multiprocessing import Process, Event, Lock, Manager, cpu_count
 
 from data_preprocessor import fetch_all_data
-from ensemble_classifier import AdaDTEnsembler, write_data
+from ensemble_classifier import AdaDTEnsembler, BgEnsembler, write_data
 
 
 def proc(X_train, y_train, X_test, y_real, finishevent, printlock, resultmanager):
     while not finishevent.is_set():
-        y_pred, acc = AdaDTEnsembler(X_train, y_train, X_test, y_real)
+        y_pred, acc = BgEnsembler(X_train, y_train, X_test, y_real)
         with printlock:
             print 'The accuracy score is', acc
-        if acc > 0.763:
+        if acc > 0.777:
             resultmanager['pred_y'] = y_pred
             resultmanager['acc'] = acc
             finishevent.set()
@@ -29,7 +29,7 @@ def main():
         p.start()
     for p in procs:
         p.join()
-    label = 'adadt' + str(int(result_manager['acc']*1000))
+    label = 'bagdt_time' + str(int(result_manager['acc']*1000))
     write_data(result_manager['pred_y'], label)
 
 

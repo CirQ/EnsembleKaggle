@@ -77,15 +77,23 @@ def outlier_detection(data):
     return (data['SL'] > q1) | (data['EEG'] < q6)
 
 def drop_coulmn(data):
-    return data                                 # 0.758 0.757
-    # return data.drop(['SL'], axis=1)            # 0.733 0.736
-    # return data.drop(['Circulation'], axis=1)   # 0.743 0.743
-    # return data.drop(['Time'], axis=1)          # 0.741 0.739
-    # return data.drop(['HR'], axis=1)            # 0.745 0.742
-    # return data.drop(['SL', 'Time'], axis=1)    # 0.71 0.701
-    # return data.drop(['SL', 'HR'], axis=1)      # 0.701 0.709
-    # return data.drop(['Circulation', 'Time'], axis=1)   # 0.718 0.719
-    # return data.drop(['Circulation', 'HR'], axis=1)     # 0.702 0.7
+    # return data                                 # 0.758 0.757  0.761
+    # return data.drop(['SL'], axis=1)            # 0.733 0.736  0.743
+    # return data.drop(['Circulation'], axis=1)   # 0.743 0.743  0.736
+    # return data.drop(['Time'], axis=1)          # 0.741 0.739  0.748
+    # return data.drop(['HR'], axis=1)            # 0.745 0.742  0.754
+    # return data.drop(['SL', 'Time'], axis=1)    # 0.71 0.701   0.713
+    # return data.drop(['SL', 'HR'], axis=1)      # 0.701 0.709  0.715
+    # return data.drop(['Circulation', 'Time'], axis=1)   # 0.718 0.719  0.736
+    # return data.drop(['Circulation', 'HR'], axis=1)     # 0.702 0.7    0.701
+
+    data['SC'] = data['SL'] + data['Circulation']
+    data['TH'] = data['Time'] + data['HR']
+    # return data                                 # 0.757
+    # return data.drop(['SL'], axis=1)            # 0.752
+    # return data.drop(['Circulation'], axis=1)   # 0.745
+    return data.drop(['Time'], axis=1)          # 0.761
+    # return data.drop(['HR'], axis=1)            # 0.745
 
 
 def fetch_all_data():

@@ -6,6 +6,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier
+from scipy import stats
 
 def outlier_detection(data):
     q1 = data['SL'].quantile(0.995)
@@ -79,8 +80,20 @@ def main_criterion():
         print d, 'ent:', ent, 'gini:', gini
     draw_criterion(ents, ginis)
 
+def main_repeat():
+    accs = []
+    for i in range(500):
+        acc = trial(criterion='entropy', max_depth=16)
+        accs.append(acc)
+        print i+1, 'acc:', acc
+    fig, ax = plt.subplots()
+    ax.boxplot(accs, labels=['dt'])
+    ax.set_ylim(0.64, 0.72)
+    print stats.describe(accs)
+    plt.savefig('dt_500_plot.eps', idp=1000)
 
 
 if __name__ == '__main__':
     # main_depth()
-    main_criterion()
+    # main_criterion()
+    main_repeat()

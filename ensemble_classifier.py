@@ -5,6 +5,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score
 
 from data_preprocessor import fetch_all_data
+from util import annotated_timer
 
 
 def evaluate_accuracy(model, X, y, testX, testy):
@@ -21,6 +22,7 @@ def write_data(yhat, filename):
 
 
 
+@annotated_timer('adaboost dt single round')
 def AdaDTEnsembler(X_train, y_train, X_test, y_real):
     dt = DecisionTreeClassifier(
         criterion='entropy',
@@ -35,7 +37,36 @@ def AdaDTEnsembler(X_train, y_train, X_test, y_real):
     return evaluate_accuracy(abc, X_train, y_train, X_test, y_real)
 
 
+@annotated_timer('random forest single round')
+def RFEnsembler(X_train, y_train, X_test, y_real):
+    rf = RandomForestClassifier(
+        n_estimators=500,
+        criterion='entropy',
+        max_depth=16,
+        max_features='log2',
+        n_jobs=-1,
+    )
+    return evaluate_accuracy(rf, X_train, y_train, X_test, y_real)
+
+
+# @annotated_timer('bagging single round')
+def BgEnsembler(X_train, y_train, X_test, y_real):
+    dt = DecisionTreeClassifier(
+        criterion='entropy',
+        max_depth=16,
+        max_features='log2',
+    )
+    bg = BaggingClassifier(
+        base_estimator=dt,
+        n_estimators=100,
+        # n_jobs=-1,
+    )
+    return evaluate_accuracy(bg, X_train, y_train, X_test, y_real)
+
+
 if __name__ == '__main__':
     X_train, y_train, X_test, y_real = fetch_all_data()
-    y_pred, acc = AdaDTEnsembler(X_train, y_train, X_test, y_real)
+    # y_pred, acc = AdaDTEnsembler(X_train, y_train, X_test, y_real)
+    y_pred, acc = RFEnsembler(X_train, y_train, X_test, y_real)
+    # y_pred, acc = BgEnsembler(X_train, y_train, X_test, y_real)
     print 'accuracy:', acc
