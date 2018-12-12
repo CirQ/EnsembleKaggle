@@ -37,7 +37,7 @@ def AdaDTEnsembler(X_train, y_train, X_test, y_real, nest=500):
     return evaluate_accuracy(abc, X_train, y_train, X_test, y_real)
 
 
-# @annotated_timer('random forest single round')
+@annotated_timer('random forest single round')
 def RFEnsembler(X_train, y_train, X_test, y_real, nest=500):
     rf = RandomForestClassifier(
         n_estimators=nest,
@@ -70,3 +70,4 @@ if __name__ == '__main__':
     y_pred, acc, _ = RFEnsembler(X_train, y_train, X_test, y_real)
     # y_pred, acc, _ = BgEnsembler(X_train, y_train, X_test, y_real)
     print 'accuracy:', acc
+    write_data(y_pred, '11849180-submission')

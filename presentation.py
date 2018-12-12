@@ -11,7 +11,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
-from sklearn.metrics import accuracy_score, confusion_matrix
+from sklearn.metrics import precision_score, recall_score, confusion_matrix
 
 from data_preprocessor import drop_coulmn
 
@@ -92,9 +92,27 @@ def analyze(skipdump=False):
     plt.savefig('disc_conf.eps', dpi=1000)
 
 
+def discussion():
+    clf = joblib.load('best_model.pickle')
+    X_test = pd.read_csv('test.csv')
+    X_test = drop_coulmn(X_test)
+    y_real = pd.read_csv('true_label.csv')
+    y_pred = clf.predict(X_test)
+
+    labels = ['Standing', 'Walking', 'Sitting', 'Falling', 'Cramps', 'Running']
+    for label in range(6):
+        is_real = y_real == label
+        is_pred = y_pred == label
+        print 'for label', labels[label]
+        print 'precision:', precision_score(is_real, is_pred)
+        print '   recall:', recall_score(is_real, is_pred)
+        print ''
+
+
 
 if __name__ == '__main__':
     # datasets = fetch_all_data()
     # sta = stats(AdaDTEnsembler, 'ada', *datasets)
     # draw('ada')
-    analyze(True)
+    # analyze(True)
+    discussion()
